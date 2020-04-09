@@ -5,7 +5,7 @@ const friction = 0.8
 const keys = []
 
 let interval
-let p1Selected = 'red'
+let p1Selected = 'black'
 let p2Selected = 'blue'
 
 let percentageHpP1 = 100

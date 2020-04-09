@@ -4,7 +4,8 @@ const context = canvas.getContext('2d')
 const friction = 0.8
 const keys = []
 
-let p1Selected = 'red'
+let interval
+let p1Selected = 'black'
 let p2Selected = 'black'
 
 let percentageHpP1 = 100
@@ -176,6 +177,7 @@ if (p1Selected === 'red') {
   p1Boxer.scope = p1BlueSelected.scope
   p1Boxer.defense = p1BlueSelected.defense
   p1Boxer.healPoints = p1BlueSelected.healPoints
+  p1Boxer.remainingHp = p1BlueSelected.healPoints
   p1Boxer.speed = p1BlueSelected.speed
   p1Boxer.boxerImage.src = p1BlueSelected.imageSrc
 } else if (p1Selected === 'black') {
@@ -187,6 +189,7 @@ if (p1Selected === 'red') {
   p1Boxer.scope = p1BlackSelected.scope
   p1Boxer.defense = p1BlackSelected.defense
   p1Boxer.healPoints = p1BlackSelected.healPoints
+  p1Boxer.remainingHp = p1BlackSelected.healPoints
   p1Boxer.speed = p1BlackSelected.speed
   p1Boxer.boxerImage.src = p1BlackSelected.imageSrc
 }
@@ -239,14 +242,23 @@ function update() {
   moveBoxer2()
   attackBoxer1()
   attackBoxer2()
+  console.log(p1Boxer)
+  console.log(p2Boxer)
   drawP1HpBar(percentageHpP2)
   drawP2HpBar(percentageHpP1)
-  ringLimitsp1()
+  ringLimits()
 }
 
-setInterval(update, 1000 / 60)
+function startGame() {
+  if (interval) return
+  interval = setInterval(update, 1000 / 60)
+}
 
-function ringLimitsp1() {
+function gameOver() {
+  clearInterval(interval)
+}
+
+function ringLimits() {
   if (p1Boxer.x > canvas.width - p1Boxer.width || p1Boxer.x + p1Boxer.velX < 0) {
     p1Boxer.velX *= -2
   }
@@ -320,6 +332,9 @@ function drawP1HpBar(remainingHp) {
     const hpBar00p1 = new Image()
     hpBar00p1.src = images.hpBar00p1
     context.drawImage(hpBar00p1, 80, 50, 250, 43)
+    setTimeout(function () {
+      gameOver()
+    }, 1000)
   }
 }
 
@@ -379,18 +394,27 @@ function drawP2HpBar(remainingHp) {
     const hpBar00p2 = new Image()
     hpBar00p2.src = images.hpBar00p2
     context.drawImage(hpBar00p2, 390, 50, 250, 43)
+    setTimeout(function () {
+      gameOver()
+    }, 1000)
   }
 }
 
 function calculateDamageP1() {
   p2Boxer.remainingHp = p2Boxer.remainingHp - p1Boxer.attack * (p2Boxer.defense / 10)
   percentageHpP1 = (p2Boxer.remainingHp * 100) / p2Boxer.healPoints
+  // console.log(
+  //   `p2RemHp ${p2Boxer.remainingHp}, p1Atk ${p1Boxer.attack} p2Def ${p2Boxer.defense}, p1percentage ${percentageHpP1} p2HP ${p2Boxer.healPoints}`
+  //)
   return percentageHpP1
 }
 
 function calculateDamageP2() {
   p1Boxer.remainingHp = p1Boxer.remainingHp - p2Boxer.attack * (p1Boxer.defense / 10)
   percentageHpP2 = (p1Boxer.remainingHp * 100) / p1Boxer.healPoints
+  // console.log(
+  //   `p1RemHp ${p1Boxer.remainingHp}, p2Atk ${p2Boxer.attack} p1Def ${p1Boxer.defense}, p2percentage ${percentageHpP2} p2HP ${p1Boxer.healPoints}`
+  //)
   return percentageHpP2
 }
 
@@ -766,6 +790,11 @@ function drawP2Boxer() {
 //Eventos
 document.addEventListener('keydown', (e) => {
   keys[e.keyCode] = true
+  key = e.keyCode
+  switch (key) {
+    case 13:
+      return startGame()
+  }
 })
 
 document.addEventListener('keyup', (e) => {

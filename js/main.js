@@ -5,7 +5,7 @@ const friction = 0.8
 const keys = []
 
 let p1Selected = 'red'
-let p2Selected = 'blue'
+let p2Selected = 'black'
 
 let percentageHpP1 = 100
 let percentageHpP2 = 100
@@ -43,7 +43,7 @@ const images = {
 
 let p1RedSelected = {
   x: 20,
-  y: 20,
+  y: 140,
   width: 60,
   height: 80,
   attack: 5,
@@ -67,7 +67,7 @@ let p2RedSelected = {
 }
 let p1BlueSelected = {
   x: 20,
-  y: 20,
+  y: 140,
   width: 70,
   height: 90,
   attack: 8,
@@ -91,7 +91,7 @@ let p2BlueSelected = {
 }
 let p1BlackSelected = {
   x: 20,
-  y: 20,
+  y: 140,
   width: 80,
   height: 100,
   attack: 15,
@@ -241,9 +241,28 @@ function update() {
   attackBoxer2()
   drawP1HpBar(percentageHpP2)
   drawP2HpBar(percentageHpP1)
+  ringLimitsp1()
 }
 
 setInterval(update, 1000 / 60)
+
+function ringLimitsp1() {
+  if (p1Boxer.x > canvas.width - p1Boxer.width || p1Boxer.x + p1Boxer.velX < 0) {
+    p1Boxer.velX *= -2
+  }
+
+  if (p1Boxer.y > canvas.height - p1Boxer.height || p1Boxer.y + p1Boxer.velY < 103) {
+    p1Boxer.velY *= -2
+  }
+
+  if (p2Boxer.x > canvas.width - p2Boxer.width || p2Boxer.x + p2Boxer.velX < 0) {
+    p2Boxer.velX *= -2
+  }
+
+  if (p2Boxer.y > canvas.height - p2Boxer.height || p2Boxer.y + p2Boxer.velY < 103) {
+    p2Boxer.velY *= -2
+  }
+}
 
 function drawP1HpBar(remainingHp) {
   if (remainingHp <= 100 && remainingHp >= 90) {
@@ -382,10 +401,7 @@ function isRedP1PunchingArmUp() {
     p1Boxer.y < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + 10 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -396,10 +412,7 @@ function isBlueP1PunchingArmUp() {
     p1Boxer.y < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + 10 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -410,10 +423,7 @@ function isBlackP1PunchingArmUp() {
     p1Boxer.y + 3 < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + 3 + 11 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -424,10 +434,7 @@ function isRedP1PunchingArmDown() {
     p1Boxer.y + p1Boxer.width + 10 < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + p1Boxer.width + 10 + 10 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -438,10 +445,7 @@ function isBlueP1PunchingArmDown() {
     p1Boxer.y + p1Boxer.width + 10 < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + p1Boxer.width + 10 + 10 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -452,10 +456,7 @@ function isBlackP1PunchingArmDown() {
     p1Boxer.y + p1Boxer.width + 6 < p2Boxer.y + p2Boxer.height &&
     p1Boxer.y + p1Boxer.width + 6 + 11 > p2Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP1()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -525,10 +526,7 @@ function isRedP2PunchingArmUp() {
     p2Boxer.y < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + 10 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -539,10 +537,7 @@ function isBlueP2PunchingArmUp() {
     p2Boxer.y < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + 10 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -553,10 +548,7 @@ function isBlackP2PunchingArmUp() {
     p2Boxer.y + 3 < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + 3 + 11 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -567,10 +559,7 @@ function isRedP2PunchingArmDown() {
     p2Boxer.y + p2Boxer.height - 10 < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + p2Boxer.height - 10 + 10 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -581,10 +570,7 @@ function isBlueP2PunchingArmDown() {
     p2Boxer.y + p2Boxer.height - 10 < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + p2Boxer.height - 10 + 10 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -595,10 +581,7 @@ function isBlackP2PunchingArmDown() {
     p2Boxer.y + p2Boxer.height - 14 < p1Boxer.y + p1Boxer.height &&
     p2Boxer.y + p2Boxer.height - 14 + 11 > p1Boxer.y
   ) {
-    console.log(`Esta Pegando`)
     calculateDamageP2()
-  } else {
-    console.log(`NO Esta Pegando`)
   }
 }
 
@@ -788,7 +771,3 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
   keys[e.keyCode] = false
 })
-
-// document.addEventListener('keypress', (e) => {
-//   keys[e.keyCode] = true
-// })

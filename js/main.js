@@ -4,8 +4,8 @@ const context = canvas.getContext('2d')
 const friction = 0.8
 const keys = []
 
-let p1Selected = 'black'
-let p2Selected = 'black'
+let p1Selected = 'red'
+let p2Selected = 'blue'
 //let p2Selected
 
 const images = {
@@ -22,11 +22,11 @@ let p1RedSelected = {
   y: 20,
   width: 60,
   height: 80,
-  attack: 8,
-  scope: 50,
+  attack: 5,
+  scope: 150,
   defese: 4,
-  healPoints: 80,
-  speed: 3,
+  healPoints: 60,
+  speed: 30,
   imageSrc: images.boxerRedP1,
 }
 let p2RedSelected = {
@@ -34,11 +34,11 @@ let p2RedSelected = {
   y: 360,
   width: 60,
   height: 80,
-  attack: 8,
-  scope: 50,
+  attack: 5,
+  scope: 150,
   defese: 4,
-  healPoints: 80,
-  speed: 3,
+  healPoints: 60,
+  speed: 30,
   imageSrc: images.boxerRedP2,
 }
 let p1BlueSelected = {
@@ -46,11 +46,11 @@ let p1BlueSelected = {
   y: 20,
   width: 70,
   height: 90,
-  attack: 12,
-  scope: 20,
-  defese: 6,
+  attack: 8,
+  scope: 100,
+  defese: 7,
   healPoints: 90,
-  speed: 4,
+  speed: 15,
   imageSrc: images.boxerBlueP1,
 }
 let p2BlueSelected = {
@@ -58,11 +58,11 @@ let p2BlueSelected = {
   y: 360,
   width: 70,
   height: 90,
-  attack: 12,
-  scope: 20,
-  defese: 6,
+  attack: 8,
+  scope: 100,
+  defese: 7,
   healPoints: 90,
-  speed: 4,
+  speed: 20,
   imageSrc: images.boxerBlueP2,
 }
 let p1BlackSelected = {
@@ -70,11 +70,11 @@ let p1BlackSelected = {
   y: 20,
   width: 80,
   height: 100,
-  attack: 10,
-  scope: 35,
-  defese: 8,
-  healPoints: 100,
-  speed: 3,
+  attack: 15,
+  scope: 70,
+  defese: 10,
+  healPoints: 130,
+  speed: 10,
   imageSrc: images.boxerBlackP1,
 }
 let p2BlackSelected = {
@@ -82,11 +82,11 @@ let p2BlackSelected = {
   y: 360,
   width: 80,
   height: 100,
-  attack: 10,
-  scope: 35,
-  defese: 8,
-  healPoints: 100,
-  speed: 3,
+  attack: 15,
+  scope: 70,
+  defese: 10,
+  healPoints: 130,
+  speed: 10,
   imageSrc: images.boxerBlackP2,
 }
 
@@ -200,7 +200,7 @@ if (p2Selected === 'red') {
   p2Boxer.boxerImage.src = p2BlackSelected.imageSrc
 }
 
-//Funciones Principales
+//-  -  -  -  -  -  U     P     G     R     A     D     E     -  -  -  -  -  -  -
 function update() {
   context.clearRect(0, 0, canvas.width, canvas.height)
   drawP1Boxer()
@@ -209,9 +209,29 @@ function update() {
   moveBoxer2()
   attackBoxer1()
   attackBoxer2()
+  //isPunchingP1Up()
 }
 
 setInterval(update, 1000 / 60)
+
+function isP1Punching() {
+  if (
+    p1Boxer.x + p1Boxer.width - 10 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 10 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + 10 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+// if (rect1.x < rect2.x + rect2.width &&
+// rect1.x + rect1.width > rect2.x &&
+// rect1.y < rect2.y + rect2.height &&
+// rect1.y + rect1.height > rect2.y) {
+//   collision detected!
 
 function attackBoxer1() {
   if (keys[84]) {
@@ -221,6 +241,7 @@ function attackBoxer1() {
       p1Boxer.scope += p1RedSelected.scope
       context.fillStyle = '#EA3C63' //Color Rojo
       context.fillRect(p1Boxer.x + p1Boxer.width - 10, p1Boxer.y, p1Boxer.scope, 10)
+      isP1Punching()
     } else if (p1Selected === 'blue') {
       p1Boxer.scope += p1BlueSelected.scope
       context.fillStyle = '#3EAAF4' //Color Azul
@@ -307,25 +328,53 @@ function attackBoxer2() {
 function moveBoxer1() {
   if (keys[68]) {
     if (p1Boxer.velX < p1Boxer.speed) {
-      p1Boxer.velX++
+      //p1Boxer.velX++
+      if (p1Selected === 'red') {
+        p1Boxer.velX += 2
+      } else if (p1Selected === 'blue') {
+        p1Boxer.velX += 1.5
+      } else if (p1Selected === 'black') {
+        p1Boxer.velX += 0.5
+      }
     }
   }
 
   if (keys[65]) {
     if (p1Boxer.velX > -p1Boxer.speed) {
-      p1Boxer.velX--
+      //p1Boxer.velX--
+      if (p1Selected === 'red') {
+        p1Boxer.velX -= 2
+      } else if (p1Selected === 'blue') {
+        p1Boxer.velX -= 1.5
+      } else if (p1Selected === 'black') {
+        p1Boxer.velX -= 0.5
+      }
     }
   }
 
   if (keys[83]) {
     if (p1Boxer.velY < p1Boxer.speed) {
-      p1Boxer.velY++
+      //p1Boxer.velY++
+      if (p1Selected === 'red') {
+        p1Boxer.velY += 2
+      } else if (p1Selected === 'blue') {
+        p1Boxer.velY += 1.5
+      } else if (p1Selected === 'black') {
+        p1Boxer.velY += 0.5
+      }
     }
   }
 
   if (keys[87]) {
     if (p1Boxer.velY > -p1Boxer.speed) {
-      p1Boxer.velY--
+      //p1Boxer.velY--
+      if (p1Selected === 'red') {
+        p1Boxer.velY -= 2
+      } else if (p1Selected === 'blue') {
+        p1Boxer.velY -= 1.5
+      } else if (p1Selected === 'black') {
+        p1Boxer.velY -= 0.5
+      }
     }
   }
 
@@ -339,25 +388,53 @@ function moveBoxer1() {
 function moveBoxer2() {
   if (keys[39]) {
     if (p2Boxer.velX < p2Boxer.speed) {
-      p2Boxer.velX++
+      //p2Boxer.velX++
+      if (p2Selected === 'red') {
+        p2Boxer.velX += 2
+      } else if (p2Selected === 'blue') {
+        p2Boxer.velX += 1.5
+      } else if (p2Selected === 'black') {
+        p2Boxer.velX += 0.5
+      }
     }
   }
 
   if (keys[37]) {
     if (p2Boxer.velX > -p2Boxer.speed) {
-      p2Boxer.velX--
+      //p2Boxer.velX--
+      if (p2Selected === 'red') {
+        p2Boxer.velX -= 2
+      } else if (p2Selected === 'blue') {
+        p2Boxer.velX -= 1.5
+      } else if (p2Selected === 'black') {
+        p2Boxer.velX -= 0.5
+      }
     }
   }
 
   if (keys[40]) {
     if (p2Boxer.velY < p2Boxer.speed) {
-      p2Boxer.velY++
+      //p2Boxer.velY++
+      if (p2Selected === 'red') {
+        p2Boxer.velY += 2
+      } else if (p2Selected === 'blue') {
+        p2Boxer.velY += 1.5
+      } else if (p2Selected === 'black') {
+        p2Boxer.velY += 0.5
+      }
     }
   }
 
   if (keys[38]) {
     if (p2Boxer.velY > -p2Boxer.speed) {
-      p2Boxer.velY--
+      //p2Boxer.velY--
+      if (p2Selected === 'red') {
+        p2Boxer.velY -= 2
+      } else if (p2Selected === 'blue') {
+        p2Boxer.velY -= 1.5
+      } else if (p2Selected === 'black') {
+        p2Boxer.velY -= 0.5
+      }
     }
   }
 
@@ -369,7 +446,6 @@ function moveBoxer2() {
 }
 
 function drawP1Boxer() {
-  //context.drawImage(p1Boxer.boxerImage, p1Boxer.x, p1Boxer.y, p1Boxer.width, p1Boxer.height)
   context.drawImage(p1Boxer.boxerImage, p1Boxer.x, p1Boxer.y, p1Boxer.width, p1Boxer.height)
 }
 
@@ -399,3 +475,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
   keys[e.keyCode] = false
 })
+
+// document.addEventListener('keypress', (e) => {
+//   keys[e.keyCode] = true
+// })

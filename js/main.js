@@ -5,7 +5,7 @@ const friction = 0.8
 const keys = []
 
 let p1Selected = 'red'
-let p2Selected = 'blue'
+let p2Selected = 'black'
 //let p2Selected
 
 const images = {
@@ -214,7 +214,7 @@ function update() {
 
 setInterval(update, 1000 / 60)
 
-function isP1Punching() {
+function isRedP1PunchingArmUp() {
   if (
     p1Boxer.x + p1Boxer.width - 10 < p2Boxer.x + p2Boxer.width &&
     p1Boxer.x + p1Boxer.width - 10 + p1Boxer.scope > p2Boxer.x &&
@@ -227,11 +227,70 @@ function isP1Punching() {
   }
 }
 
-// if (rect1.x < rect2.x + rect2.width &&
-// rect1.x + rect1.width > rect2.x &&
-// rect1.y < rect2.y + rect2.height &&
-// rect1.y + rect1.height > rect2.y) {
-//   collision detected!
+function isBlueP1PunchingArmUp() {
+  if (
+    p1Boxer.x + p1Boxer.width - 3 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 3 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + 10 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlackP1PunchingArmUp() {
+  if (
+    p1Boxer.x + p1Boxer.width - 9 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 9 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y + 3 < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + 3 + 11 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isRedP1PunchingArmDown() {
+  if (
+    p1Boxer.x + p1Boxer.width - 10 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 10 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y + p1Boxer.width + 10 < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + p1Boxer.width + 10 + 10 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlueP1PunchingArmDown() {
+  if (
+    p1Boxer.x + p1Boxer.width - 3 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 3 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y + p1Boxer.width + 10 < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + p1Boxer.width + 10 + 10 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlackP1PunchingArmDown() {
+  if (
+    p1Boxer.x + p1Boxer.width - 11 < p2Boxer.x + p2Boxer.width &&
+    p1Boxer.x + p1Boxer.width - 11 + p1Boxer.scope > p2Boxer.x &&
+    p1Boxer.y + p1Boxer.width + 6 < p2Boxer.y + p2Boxer.height &&
+    p1Boxer.y + p1Boxer.width + 6 + 11 > p2Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
 
 function attackBoxer1() {
   if (keys[84]) {
@@ -241,15 +300,17 @@ function attackBoxer1() {
       p1Boxer.scope += p1RedSelected.scope
       context.fillStyle = '#EA3C63' //Color Rojo
       context.fillRect(p1Boxer.x + p1Boxer.width - 10, p1Boxer.y, p1Boxer.scope, 10)
-      isP1Punching()
+      isRedP1PunchingArmUp()
     } else if (p1Selected === 'blue') {
       p1Boxer.scope += p1BlueSelected.scope
       context.fillStyle = '#3EAAF4' //Color Azul
       context.fillRect(p1Boxer.x + p1Boxer.width - 3, p1Boxer.y, p1Boxer.scope, 10)
+      isBlueP1PunchingArmUp()
     } else if (p1Selected === 'black') {
       p1Boxer.scope += p1BlackSelected.scope
       context.fillStyle = 'black'
       context.fillRect(p1Boxer.x + p1Boxer.width - 9, p1Boxer.y + 3, p1Boxer.scope, 11)
+      isBlackP1PunchingArmUp()
     }
   }
 
@@ -265,6 +326,7 @@ function attackBoxer1() {
         p1Boxer.scope,
         10
       )
+      isRedP1PunchingArmDown()
     } else if (p1Selected === 'blue') {
       p1Boxer.scope += p1BlueSelected.scope
       context.fillStyle = '#3EAAF4' //Color Azul
@@ -274,6 +336,7 @@ function attackBoxer1() {
         p1Boxer.scope,
         10
       )
+      isBlueP1PunchingArmDown()
     } else if (p1Selected === 'black') {
       p1Boxer.scope += p1BlackSelected.scope
       context.fillStyle = 'black'
@@ -283,9 +346,94 @@ function attackBoxer1() {
         p1Boxer.scope,
         11
       )
+      isBlackP1PunchingArmDown()
     }
   }
 }
+
+function isRedP2PunchingArmUp() {
+  if (
+    p2Boxer.x + 4 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 4 > p1Boxer.x &&
+    p2Boxer.y < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + 10 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlueP2PunchingArmUp() {
+  if (
+    p2Boxer.x + 3 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 3 > p1Boxer.x &&
+    p2Boxer.y < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + 10 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlackP2PunchingArmUp() {
+  if (
+    p2Boxer.x + 10 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 10 > p1Boxer.x &&
+    p2Boxer.y + 3 < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + 3 + 11 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isRedP2PunchingArmDown() {
+  if (
+    p2Boxer.x + 5 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 5 > p1Boxer.x &&
+    p2Boxer.y + p2Boxer.height - 10 < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + p2Boxer.height - 10 + 10 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlueP2PunchingArmDown() {
+  if (
+    p2Boxer.x + 3 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 3 > p1Boxer.x &&
+    p2Boxer.y + p2Boxer.height - 10 < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + p2Boxer.height - 10 + 10 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+function isBlackP2PunchingArmDown() {
+  if (
+    p2Boxer.x + 10 - p2Boxer.scope < p1Boxer.x + p1Boxer.width &&
+    p2Boxer.x + 10 > p1Boxer.x &&
+    p2Boxer.y + p2Boxer.height - 14 < p1Boxer.y + p1Boxer.height &&
+    p2Boxer.y + p2Boxer.height - 14 + 11 > p1Boxer.y
+  ) {
+    console.log(`Esta Pegando`)
+  } else {
+    console.log(`NO Esta Pegando`)
+  }
+}
+
+// if (rect1.x < rect2.x + rect2.width &&
+// rect1.x + rect1.width > rect2.x &&
+// rect1.y < rect2.y + rect2.height &&
+// rect1.y + rect1.height > rect2.y) {
+//   collision detected!
 
 function attackBoxer2() {
   if (keys[79]) {
@@ -295,14 +443,17 @@ function attackBoxer2() {
       p2Boxer.scope += p2RedSelected.scope
       context.fillStyle = '#EA3C63'
       context.fillRect(p2Boxer.x + 4, p2Boxer.y, -p2Boxer.scope, 10)
+      isRedP2PunchingArmUp()
     } else if (p2Selected === 'blue') {
       p2Boxer.scope += p2BlueSelected.scope
       context.fillStyle = '#3EAAF4'
       context.fillRect(p2Boxer.x + 3, p2Boxer.y, -p2Boxer.scope, 10)
+      isBlueP2PunchingArmUp()
     } else if (p2Selected === 'black') {
       p2Boxer.scope += p2BlackSelected.scope
       context.fillStyle = 'black'
       context.fillRect(p2Boxer.x + 10, p2Boxer.y + 3, -p2Boxer.scope, 11)
+      isBlackP2PunchingArmUp()
     }
   }
 
@@ -313,14 +464,17 @@ function attackBoxer2() {
       p2Boxer.scope += p2RedSelected.scope
       context.fillStyle = '#EA3C63'
       context.fillRect(p2Boxer.x + 5, p2Boxer.y + p2Boxer.height - 10, -p2Boxer.scope, 10)
+      isRedP2PunchingArmDown()
     } else if (p2Selected === 'blue') {
       p2Boxer.scope += p2BlueSelected.scope
       context.fillStyle = '#3EAAF4'
       context.fillRect(p2Boxer.x + 3, p2Boxer.y + p2Boxer.height - 10, -p2Boxer.scope, 10)
+      isBlueP2PunchingArmDown()
     } else if (p2Selected === 'black') {
       p2Boxer.scope += p2BlackSelected.scope
       context.fillStyle = 'black'
       context.fillRect(p2Boxer.x + 10, p2Boxer.y + p2Boxer.height - 14, -p2Boxer.scope, 11)
+      isBlackP2PunchingArmDown()
     }
   }
 }
@@ -452,20 +606,6 @@ function drawP1Boxer() {
 function drawP2Boxer() {
   context.drawImage(p2Boxer.boxerImage, p2Boxer.x, p2Boxer.y, p2Boxer.width, p2Boxer.height)
 }
-
-// function isTouchingP1Up(p1x, p1y, p1width, p1height, p2x, p2y, p2width, p2height) {
-//   return p1x < p2x + p2width && p1x + p1width > p2x && p1y < p2y + p2height && p1y + p1height > p2y
-//   console.log(`Hay una colision entre Boxeadores`)
-// }
-
-// isTouching(pipe) {
-//   return (
-//     this.x < pipe.x + pipe.width &&
-//     this.x + this.width > pipe.x &&
-//     this.y < pipe.y + pipe.height &&
-//     this.y + this.height > pipe.y
-//   )
-// }
 
 //Eventos
 document.addEventListener('keydown', (e) => {

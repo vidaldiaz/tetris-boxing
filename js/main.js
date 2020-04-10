@@ -1,17 +1,27 @@
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
+let stage = 'startScreen'
 const friction = 0.8
 const keys = []
 
 let interval
-let p1Selected = 'black'
+let p1Selected = 'blue'
 let p2Selected = 'blue'
 
 let percentageHpP1 = 100
 let percentageHpP2 = 100
 
 const images = {
+  pressEnterScreen: './assets/pressStartScreen.png',
+  screenControls: './assets/screenControls.png',
+  selectRedp1: './assets/charSelectRedp1.png',
+  selectRedp2: './assets/charSelectRedp2.png',
+  selectYellowp1: './assets/charSelectYellowp1.png',
+  selectYellowp2: './assets/charSelectYellowp2.png',
+  selectBlackp1: './assets/charSelectBlackp1.png',
+  selectBlackp2: './assets/charSelectBlackp2.png',
+  backgroundRing: './assets/backgroundRing.jpeg',
   boxerBlackP1: './assets/tetrisboxer_black_p1.png',
   boxerRedP1: './assets/tetrisboxer_red_p1.png',
   boxerBlueP1: './assets/tetrisboxer_blue_p1.png',
@@ -232,23 +242,45 @@ if (p2Selected === 'red') {
   p2Boxer.speed = p2BlackSelected.speed
   p2Boxer.boxerImage.src = p2BlackSelected.imageSrc
 }
-
+startGame()
 //-  -  -  -  -  -  U     P     G     R     A     D     E     -  -  -  -  -  -  -
 function update() {
   context.clearRect(0, 0, canvas.width, canvas.height)
-  drawP1Boxer()
-  drawP2Boxer()
-  moveBoxer1()
-  moveBoxer2()
-  attackBoxer1()
-  attackBoxer2()
-  console.log(p1Boxer)
-  console.log(p2Boxer)
-  drawP1HpBar(percentageHpP2)
-  drawP2HpBar(percentageHpP1)
-  ringLimits()
+
+  if (stage === 'startScreen') {
+    drawStartScreen()
+  }
+  if (stage === 'controls') {
+    drawControls()
+  }
+  if (stage === 'characters1') {
+    selectColor1(p1Selected)
+  }
+
+  if (stage === 'characters2') {
+    selectColor2(p2Selected)
+  }
+  if (stage === 'game') {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    drawBackgourd()
+    drawP1Boxer()
+    drawP2Boxer()
+    moveBoxer1()
+    moveBoxer2()
+    attackBoxer1()
+    attackBoxer2()
+    drawP1HpBar(percentageHpP2)
+    drawP2HpBar(percentageHpP1)
+    ringLimits()
+  }
 }
 
+function drawBackgourd() {
+  context.clearRect(0, 0, canvas.width, canvas.height)
+  const backgroundImg = new Image()
+  backgroundImg.src = images.backgroundRing
+  context.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height)
+}
 function startGame() {
   if (interval) return
   interval = setInterval(update, 1000 / 60)
@@ -403,18 +435,12 @@ function drawP2HpBar(remainingHp) {
 function calculateDamageP1() {
   p2Boxer.remainingHp = p2Boxer.remainingHp - p1Boxer.attack * (p2Boxer.defense / 10)
   percentageHpP1 = (p2Boxer.remainingHp * 100) / p2Boxer.healPoints
-  // console.log(
-  //   `p2RemHp ${p2Boxer.remainingHp}, p1Atk ${p1Boxer.attack} p2Def ${p2Boxer.defense}, p1percentage ${percentageHpP1} p2HP ${p2Boxer.healPoints}`
-  //)
   return percentageHpP1
 }
 
 function calculateDamageP2() {
   p1Boxer.remainingHp = p1Boxer.remainingHp - p2Boxer.attack * (p1Boxer.defense / 10)
   percentageHpP2 = (p1Boxer.remainingHp * 100) / p1Boxer.healPoints
-  // console.log(
-  //   `p1RemHp ${p1Boxer.remainingHp}, p2Atk ${p2Boxer.attack} p1Def ${p1Boxer.defense}, p2percentage ${percentageHpP2} p2HP ${p1Boxer.healPoints}`
-  //)
   return percentageHpP2
 }
 
@@ -495,7 +521,7 @@ function attackBoxer1() {
       isRedP1PunchingArmUp()
     } else if (p1Selected === 'blue') {
       p1Boxer.scope += p1BlueSelected.scope
-      context.fillStyle = '#3EAAF4' //Color Azul
+      context.fillStyle = '#FFEB4F' //Color Azul
       context.fillRect(p1Boxer.x + p1Boxer.width - 3, p1Boxer.y, p1Boxer.scope, 10)
       isBlueP1PunchingArmUp()
     } else if (p1Selected === 'black') {
@@ -521,7 +547,7 @@ function attackBoxer1() {
       isRedP1PunchingArmDown()
     } else if (p1Selected === 'blue') {
       p1Boxer.scope += p1BlueSelected.scope
-      context.fillStyle = '#3EAAF4' //Color Azul
+      context.fillStyle = '#FFEB4F' //Color Azul
       context.fillRect(
         p1Boxer.x + p1Boxer.width - 3,
         p1Boxer.y + p1Boxer.width + 10,
@@ -626,7 +652,7 @@ function attackBoxer2() {
       isRedP2PunchingArmUp()
     } else if (p2Selected === 'blue') {
       p2Boxer.scope += p2BlueSelected.scope
-      context.fillStyle = '#3EAAF4'
+      context.fillStyle = '#FFEB4F'
       context.fillRect(p2Boxer.x + 3, p2Boxer.y, -p2Boxer.scope, 10)
       isBlueP2PunchingArmUp()
     } else if (p2Selected === 'black') {
@@ -647,7 +673,7 @@ function attackBoxer2() {
       isRedP2PunchingArmDown()
     } else if (p2Selected === 'blue') {
       p2Boxer.scope += p2BlueSelected.scope
-      context.fillStyle = '#3EAAF4'
+      context.fillStyle = '#FFEB4F'
       context.fillRect(p2Boxer.x + 3, p2Boxer.y + p2Boxer.height - 10, -p2Boxer.scope, 10)
       isBlueP2PunchingArmDown()
     } else if (p2Selected === 'black') {
@@ -780,11 +806,71 @@ function moveBoxer2() {
 }
 
 function drawP1Boxer() {
+  if (p1Selected === 'red') {
+    p1Boxer.boxerImage.src = images.boxerRedP1
+  } else if (p1Selected === 'blue') {
+    p1Boxer.boxerImage.src = images.boxerBlueP1
+  } else if (p1Selected === 'black') {
+    p1Boxer.boxerImage.src = images.boxerBlackP1
+  }
   context.drawImage(p1Boxer.boxerImage, p1Boxer.x, p1Boxer.y, p1Boxer.width, p1Boxer.height)
 }
 
 function drawP2Boxer() {
+  if (p2Selected === 'red') {
+    p2Boxer.boxerImage.src = images.boxerRedP2
+  } else if (p2Selected === 'blue') {
+    p2Boxer.boxerImage.src = images.boxerBlueP2
+  } else if (p2Selected === 'black') {
+    p2Boxer.boxerImage.src = images.boxerBlackP2
+  }
   context.drawImage(p2Boxer.boxerImage, p2Boxer.x, p2Boxer.y, p2Boxer.width, p2Boxer.height)
+}
+
+function drawStartScreen() {
+  context.clearRect(0, 0, canvas.width, canvas.height)
+  const startScreenImage = new Image()
+  startScreenImage.src = images.pressEnterScreen
+  context.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height)
+}
+
+function drawControls() {
+  context.clearRect(0, 0, canvas.width, canvas.height)
+  const screenControlsImage = new Image()
+  screenControlsImage.src = images.screenControls
+  context.drawImage(screenControlsImage, 0, 0, canvas.width, canvas.height)
+}
+
+function selectColor1(color = p1Selected) {
+  if (p1Selected === 'red') {
+    const imageRedSelected = new Image()
+    imageRedSelected.src = images.selectRedp1
+    context.drawImage(imageRedSelected, 0, 0, canvas.width, canvas.height)
+  } else if (p1Selected === 'blue') {
+    const imageBlueSelected = new Image()
+    imageBlueSelected.src = images.selectYellowp1
+    context.drawImage(imageBlueSelected, 0, 0, canvas.width, canvas.height)
+  } else if (p1Selected === 'black') {
+    const imageBlackSelected = new Image()
+    imageBlackSelected.src = images.selectBlackp1
+    context.drawImage(imageBlackSelected, 0, 0, canvas.width, canvas.height)
+  }
+}
+
+function selectColor2(color = p2Selected) {
+  if (p2Selected === 'red') {
+    const imageRedSelected = new Image()
+    imageRedSelected.src = images.selectRedp2
+    context.drawImage(imageRedSelected, 0, 0, canvas.width, canvas.height)
+  } else if (p2Selected === 'blue') {
+    const imageBlueSelected = new Image()
+    imageBlueSelected.src = images.selectYellowp2
+    context.drawImage(imageBlueSelected, 0, 0, canvas.width, canvas.height)
+  } else if (p2Selected === 'black') {
+    const imageBlackSelected = new Image()
+    imageBlackSelected.src = images.selectBlackp2
+    context.drawImage(imageBlackSelected, 0, 0, canvas.width, canvas.height)
+  }
 }
 
 //Eventos
@@ -793,7 +879,71 @@ document.addEventListener('keydown', (e) => {
   key = e.keyCode
   switch (key) {
     case 13:
-      return startGame()
+      if (stage === 'startScreen') {
+        stage = 'controls'
+        break
+      }
+      if (stage === 'controls') {
+        stage = 'characters1'
+        break
+      }
+      if (stage === 'characters1') {
+        stage = 'characters2'
+        break
+      }
+
+      if (stage === 'characters2') {
+        stage = 'game'
+        break
+      }
+
+    case 65:
+      if (stage === 'characters1') {
+        if (p1Selected === 'red') {
+          p1Selected = 'black'
+        } else if (p1Selected === 'blue') {
+          p1Selected = 'red'
+        } else if (p1Selected === 'black') {
+          p1Selected = 'blue'
+        }
+      }
+      break
+
+    case 68:
+      if (stage === 'characters1') {
+        if (p1Selected === 'red') {
+          p1Selected = 'blue'
+        } else if (p1Selected === 'blue') {
+          p1Selected = 'black'
+        } else if (p1Selected === 'black') {
+          p1Selected = 'red'
+        }
+      }
+      break
+
+    case 37:
+      if (stage === 'characters2') {
+        if (p2Selected === 'red') {
+          p2Selected = 'black'
+        } else if (p2Selected === 'blue') {
+          p2Selected = 'red'
+        } else if (p2Selected === 'black') {
+          p2Selected = 'blue'
+        }
+      }
+      break
+
+    case 39:
+      if (stage === 'characters2') {
+        if (p2Selected === 'red') {
+          p2Selected = 'blue'
+        } else if (p2Selected === 'blue') {
+          p2Selected = 'black'
+        } else if (p2Selected === 'black') {
+          p2Selected = 'red'
+        }
+      }
+      break
   }
 })
 

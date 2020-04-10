@@ -50,6 +50,8 @@ const images = {
   hpBar20p2: './assets/hpBar20p2.png',
   hpBar10p2: './assets/hpBar10p2.png',
   hpBar00p2: './assets/hpBar00p2.png',
+  p1Win: './assets/p1Win.png',
+  p2Win: './assets/p2Win.png',
 }
 
 let p1RedSelected = {
@@ -365,6 +367,9 @@ function drawP1HpBar(remainingHp) {
     hpBar00p1.src = images.hpBar00p1
     context.drawImage(hpBar00p1, 80, 50, 250, 43)
     setTimeout(function () {
+      const p2WinImg = new Image()
+      p2WinImg.src = images.p2Win
+      context.drawImage(p2WinImg, 110, 160, 500, 100)
       gameOver()
     }, 1000)
   }
@@ -427,6 +432,9 @@ function drawP2HpBar(remainingHp) {
     hpBar00p2.src = images.hpBar00p2
     context.drawImage(hpBar00p2, 390, 50, 250, 43)
     setTimeout(function () {
+      const p1WinImg = new Image()
+      p1WinImg.src = images.p1Win
+      context.drawImage(p1WinImg, 110, 160, 500, 100)
       gameOver()
     }, 1000)
   }
